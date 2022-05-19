@@ -1,3 +1,1 @@
-# angular-ivy-juee3x
-
-[Edit on StackBlitz ⚡️](https://stackblitz.com/edit/angular-ivy-juee3x)
+Fasting Tracker for purposes of tracking the fasting time during Intermittent fasting or Ramadan etc.
