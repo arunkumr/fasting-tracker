@@ -12,9 +12,12 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 
-import {RoundProgressService} from './round-progress.service';
-import {ROUND_PROGRESS_DEFAULTS, RoundProgressDefaults} from './round-progress.config';
-import {RoundProgressEase} from './round-progress.ease';
+import { RoundProgressService } from './round-progress.service';
+import {
+  ROUND_PROGRESS_DEFAULTS,
+  RoundProgressDefaults,
+} from './round-progress.config';
+import { RoundProgressEase } from './round-progress.ease';
 
 @Component({
   selector: 'round-progress',
@@ -30,7 +33,7 @@ import {RoundProgressEase} from './round-progress.ease';
     '[style.height]': '_getElementHeight()',
     '[style.padding-bottom]': '_getPaddingBottom()',
     '[class.responsive]': 'responsive',
-  }
+  },
 })
 export class RoundProgressComponent implements OnChanges {
   private currentLinecap: 'round' | '' = '';
@@ -38,11 +41,20 @@ export class RoundProgressComponent implements OnChanges {
   /** Reference to the underlying `path` node. */
   @ViewChild('path') path: ElementRef<SVGPathElement>;
 
+  /** Reference to the underlying `fast` node. */
+  @ViewChild('fast') fast: ElementRef<SVGPathElement>;
+
   /** Current value of the progress bar. */
   @Input() current: number;
 
   /** Maximum value of the progress bar. */
   @Input() max: number;
+
+  /** Current value of the progress bar. */
+  @Input() Start: number;
+
+  /** Maximum value of the progress bar. */
+  @Input() End: number;
 
   /** Radius of the circle. */
   @Input() radius: number = this.defaults.radius;
@@ -58,6 +70,9 @@ export class RoundProgressComponent implements OnChanges {
 
   /** Width of the circle's stroke. */
   @Input() stroke: number = this.defaults.stroke;
+
+  /** Width of the circle's stroke. */
+  @Input() faststroke: number = this.defaults.stroke;
 
   /** Color of the circle. */
   @Input() color: string = this.defaults.color;
@@ -109,10 +124,19 @@ export class RoundProgressComponent implements OnChanges {
         const id = ++self.lastAnimationId;
 
         requestAnimationFrame(function animation() {
-          const currentTime = Math.min(self.service.getTimestamp() - startTime, duration);
-          const value = self.easing[self.animation](currentTime, from, changeInValue, duration);
+          const currentTime = Math.min(
+            self.service.getTimestamp() - startTime,
+            duration
+          );
+          const value = self.easing[self.animation](
+            currentTime,
+            from,
+            changeInValue,
+            duration
+          );
 
           self._updatePath(value);
+          self._updateFastDisplay(self.Start, self.End);
 
           if (self.onRender.observers.length > 0) {
             self.onRender.emit(value);
@@ -135,13 +159,47 @@ export class RoundProgressComponent implements OnChanges {
   /** Updates the path apperance. */
   private _updatePath(value: number): void {
     if (this.path) {
-      const arc = this.service.getArc(value, this.max, this.radius - this.stroke / 2,
-                                      this.radius, this.semicircle);
+      const arc = this.service.getArc(
+        value,
+        this.max,
+        this.radius - this.stroke / 2,
+        this.radius,
+        this.semicircle
+      );
       const path = this.path.nativeElement;
 
       // Remove the rounded line cap when the value is zero,
       // because SVG won't allow it to disappear completely.
       const linecap = this.rounded && value > 0 ? 'round' : '';
+
+      // This is called on each animation frame so avoid
+      // updating the line cap unless it has changed.
+      if (linecap !== this.currentLinecap) {
+        this.currentLinecap = linecap;
+        path.style.strokeLinecap = linecap;
+      }
+
+      path.setAttribute('d', arc);
+    }
+  }
+
+  /** Updates the Fast Schedule. */
+  private _updateFastDisplay(start: number, end: number): void {
+    console.log(this.fast);
+    if (this.fast) {
+      const arc = this.service.getArcWithStart(
+        start,
+        end,
+        this.max,
+        this.radius - this.faststroke / 2,
+        this.radius,
+        this.semicircle
+      );
+      const path = this.fast.nativeElement;
+
+      // Remove the rounded line cap when the value is zero,
+      // because SVG won't allow it to disappear completely.
+      const linecap = this.rounded && start > 0 ? 'round' : '';
 
       // This is called on each animation frame so avoid
       // updating the line cap unless it has changed.
@@ -180,9 +238,17 @@ export class RoundProgressComponent implements OnChanges {
   /** Change detection callback. */
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.current) {
-      this._animateChange(changes.current.previousValue, changes.current.currentValue);
+      this._animateChange(
+        changes.current.previousValue,
+        changes.current.currentValue
+      );
     } else {
       this._updatePath(this.current);
+    }
+
+    if (changes.Start) {
+    } else {
+      this._updateFastDisplay(this.Start, this.End);
     }
   }
 

@@ -5,12 +5,23 @@
     [attr.cy]="radius"
     [attr.r]="radius - stroke / 2"
     [style.stroke]="resolveColor(background)"
-    [style.stroke-width]="stroke"/>
+    [style.stroke-width]="stroke"
+  />
 
   <path
     #path
     fill="none"
     [style.stroke-width]="stroke"
     [style.stroke]="resolveColor(color)"
-    [attr.transform]="getPathTransform()"/>
+    [attr.transform]="getPathTransform()"
+  />
+
+  <path
+    #fast
+    fill="none"
+    [style.stroke-width]="faststroke"
+    stroke="blue"
+    stroke-opacity="0.5"
+    [attr.transform]="getPathTransform()"
+  />
 </svg>
