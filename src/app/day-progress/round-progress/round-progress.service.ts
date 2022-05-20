@@ -104,7 +104,8 @@ export class RoundProgressService {
       pathRadius,
       startPercentage
     );
-    const arcSweep = startPercentage - percentage <= 180 ? 0 : 1;
+    const arcSweep = Math.abs(startPercentage - percentage) <= 180 ? 0 : 1;
+    console.log(arcSweep);
 
     return `M ${start} A ${pathRadius} ${pathRadius} 0 ${arcSweep} 0 ${end}`;
   }

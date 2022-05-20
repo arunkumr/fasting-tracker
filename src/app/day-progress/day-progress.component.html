@@ -1,8 +1,20 @@
 <round-progress
-  [current]="23"
-  [max]="24"
-  [Start]="10"
-  [End]="20"
+  [current]="currentTime.internalNotation"
+  [max]="2400"
+  [Start]="profileData.startTime.internalNotation"
+  [End]="profileData.endTime.internalNotation"
   [stroke]="7"
   [faststroke]="15"
 ></round-progress>
+
+<app-hour-minute-selector
+  title="Start Time"
+  [time]="profileData.startTime"
+  (timeUpdated)="updateStartTime($event)"
+></app-hour-minute-selector>
+
+<app-hour-minute-selector
+  title="End Time"
+  [time]="profileData.endTime"
+  (timeUpdated)="updateEndTime($event)"
+></app-hour-minute-selector>

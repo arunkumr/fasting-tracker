@@ -185,7 +185,6 @@ export class RoundProgressComponent implements OnChanges {
 
   /** Updates the Fast Schedule. */
   private _updateFastDisplay(start: number, end: number): void {
-    console.log(this.fast);
     if (this.fast) {
       const arc = this.service.getArcWithStart(
         start,
@@ -247,6 +246,7 @@ export class RoundProgressComponent implements OnChanges {
     }
 
     if (changes.Start) {
+      this._updateFastDisplay(this.Start, this.End);
     } else {
       this._updateFastDisplay(this.Start, this.End);
     }

@@ -1,0 +1,17 @@
+<p>{{ title }}</p>
+<label for="hour">Hour</label>
+<select id="hour" type="number" [(ngModel)]="time.hour" (change)="onChange()">
+  <option *ngFor="let hour of hours">{{ hour }}</option>
+</select>
+<label for="minute">Minute</label>
+<select
+  id="minute"
+  type="number"
+  [(ngModel)]="time.minute"
+  (change)="onChange()"
+>
+  <option>00</option>
+  <option>15</option>
+  <option>30</option>
+  <option>45</option>
+</select>
