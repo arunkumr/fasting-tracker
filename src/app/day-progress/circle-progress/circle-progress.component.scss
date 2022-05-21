@@ -1,0 +1,131 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700,300);
+
+$background: #fefcff;
+$progressColor: #1e51dc;
+$radius: 250px;
+$semiRadius: 125px;
+$progress: var(--progress);
+$start: var(--start);
+$end: var(--end);
+$segmentRadius: 230px;
+$segmentSemiRadius: 115px;
+
+@mixin circle-define($radius) {
+  width: $radius;
+  height: $radius;
+  border-radius: 50%;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: $background;
+}
+
+.circle-wrap {
+  @include circle-define($radius);
+  background: $background;
+  border: 1px solid #cdcbd0;
+}
+
+.mask.full,
+.mask .fill {
+  animation: fill ease-in-out 1s;
+  transform: rotate($progress);
+}
+
+.section-fast {
+  .mask.full,
+  .mask .fill {
+    animation: fill ease-in-out 1s;
+    transform: rotate($end);
+  }
+}
+
+.section-fast-hidden {
+  .mask.full,
+  .mask .fill {
+    animation: fill ease-in-out 1s;
+    transform: rotate($start);
+  }
+}
+
+.circle-wrap {
+  .circle {
+    .progress {
+      .mask {
+        @include circle-define($radius);
+        position: absolute;
+        clip: rect(0px, $radius, $radius, $semiRadius);
+      }
+      .fill {
+        @include circle-define($radius);
+        position: absolute;
+      }
+      .mask {
+        .fill {
+          clip: rect(0px, $semiRadius, $radius, 0px);
+          background-color: $progressColor;
+        }
+      }
+    }
+    .section-fast,
+    .section-fast-hidden {
+      .mask {
+        @include circle-define($segmentRadius);
+        position: absolute;
+        clip: rect(0px, $segmentRadius, $segmentRadius, $segmentSemiRadius);
+        margin-top: 10px;
+        margin-left: 10px;
+        z-index: 4;
+      }
+      .fill {
+        @include circle-define($segmentRadius);
+        position: absolute;
+      }
+    }
+    .section-fast {
+      .mask {
+        .fill {
+          clip: rect(0px, $segmentSemiRadius, $segmentRadius, 0px);
+          background-color: lightblue;
+        }
+      }
+    }
+
+    .section-fast-hidden {
+      .mask {
+        .fill {
+          clip: rect(0px, $segmentSemiRadius, $segmentRadius, 0px);
+          background-color: $background;
+        }
+      }
+    }
+  }
+  .inside-circle {
+    @include circle-define(150px);
+    background: $background;
+    line-height: 120px;
+    text-align: center;
+    margin-top: 50px;
+    margin-left: 50px;
+    color: $progressColor;
+    position: absolute;
+    z-index: 100;
+    font-weight: 700;
+    font-size: 2em;
+  }
+
+  .inside-circle-2 {
+    @include circle-define(230px);
+    background: $background;
+    line-height: 120px;
+    text-align: center;
+    margin-top: 10px;
+    margin-left: 10px;
+    color: $progressColor;
+    position: absolute;
+    z-index: 3;
+    font-weight: 700;
+    font-size: 2em;
+  }
+}

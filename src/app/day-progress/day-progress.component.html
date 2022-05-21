@@ -1,11 +1,9 @@
-<round-progress
-  [current]="currentTime.internalNotation"
-  [max]="2400"
-  [Start]="profileData.startTime.internalNotation"
-  [End]="profileData.endTime.internalNotation"
-  [stroke]="7"
-  [faststroke]="15"
-></round-progress>
+<app-circle-progress
+  [currentProgress]="currentTime.internalNotation"
+  [maxProgress]="2400"
+  [segmentStart]="profileData.startTime.internalNotation"
+  [segmentEnd]="profileData.endTime.internalNotation"
+></app-circle-progress>
 
 <app-hour-minute-selector
   title="Start Time"
